@@ -32,6 +32,7 @@ export default function Home(): JSX.Element {
         // eslint-disable-next-line no-promise-executor-return
         await new Promise(resolve => setTimeout(resolve, 2000));
 
+        // eslint-disable-next-line no-console
         console.log('values', values);
     };
 
@@ -85,7 +86,7 @@ export default function Home(): JSX.Element {
                     size="lg"
                     isLoading={formState.isSubmitting}
                 >
-                    Entrar
+                    Login
                 </Button>
             </Flex>
         </Flex>

@@ -47,7 +47,7 @@ export default function CreateUser(): JSX.Element {
     > = async values => {
         // eslint-disable-next-line no-promise-executor-return
         await new Promise(resolve => setTimeout(resolve, 2000));
-
+        // eslint-disable-next-line no-console
         console.log('values', values);
     };
 

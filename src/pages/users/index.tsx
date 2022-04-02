@@ -118,7 +118,7 @@ export default function UserList(): JSX.Element {
                                                     />
                                                 }
                                             >
-                                                Editar
+                                                Edit
                                             </Button>
                                         </Td>
                                     )}
