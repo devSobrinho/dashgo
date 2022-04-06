@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createServer, Model } from 'miragejs';
+import { createServer, Factory, Model } from 'miragejs';
+// eslint-disable-next-line import/no-unresolved
+import faker from 'faker';
 
 type UserModal = {
     name: string;
@@ -13,6 +15,24 @@ export function makeServer() {
         models: {
             // Partial os itens do objetos podem ter valor ou nao
             user: Model.extend<Partial<UserModal>>({}),
+        },
+
+        factories: {
+            user: Factory.extend({
+                name(i: number) {
+                    return `User ${i + 1} ${faker.internet.userName()}`;
+                },
+                email() {
+                    return faker.internet.email();
+                },
+                createAt() {
+                    return faker.date.recent(10, new Date());
+                },
+            }),
+        },
+
+        seeds(server) {
+            server.createList('user', 200);
         },
 
         routes() {
