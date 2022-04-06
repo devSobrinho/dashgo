@@ -30,7 +30,7 @@ import { User } from '../../services/types/shared-types';
 // import { dateFormat } from '../../utils/dateFormat';
 
 export default function UserList(): JSX.Element {
-    // controls para animação o frame-motion
+    // controls para animação do frame-motion
     const controls = useAnimation();
 
     const [page, setPage] = useState(1);

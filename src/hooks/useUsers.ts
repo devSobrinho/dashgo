@@ -38,7 +38,7 @@ export const getUsers = async (page = 1): Promise<GetUsersResponse> => {
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useUsers(page = 1) {
-    return useQuery('users', () => getUsers(page), {
+    return useQuery(['users', page], () => getUsers(page), {
         staleTime: 1000 * 5, // 5 seconds, durante 5s o react-query não precisa refazer o feacth, assim nao precisando ser recarregado nesse time
     });
 }
