@@ -17,7 +17,7 @@ import {
     Tr,
     useBreakpointValue,
 } from '@chakra-ui/react';
-import { animate, motion, useAnimation, useMotionValue } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import Link from 'next/link';
 import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
 import { useQuery } from 'react-query';
@@ -25,6 +25,7 @@ import { useQuery } from 'react-query';
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
+import { api } from '../../services/api';
 import { User } from '../../services/types/shared-types';
 // import { dateFormat } from '../../utils/dateFormat';
 
@@ -36,8 +37,7 @@ export default function UserList(): JSX.Element {
     const { data, isLoading, isFetching, error, refetch } = useQuery(
         'users',
         async () => {
-            const response = await fetch('http://localhost:3000/api/users');
-            const data = await response.json();
+            const { data } = await api.get('users');
 
             const users = data.users.map((user: User) => {
                 return {
