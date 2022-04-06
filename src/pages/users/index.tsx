@@ -186,7 +186,11 @@ export default function UserList(): JSX.Element {
                                     })}
                                 </Tbody>
                             </Table>
-                            <Pagination />
+                            <Pagination
+                                totalCountOfRegisters={200}
+                                currentPage={4}
+                                onPageChange={() => {}}
+                            />
                         </>
                     )}
                 </Box>
