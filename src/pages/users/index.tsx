@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-nested-ternary */
 import {
     Box,
     Button,
@@ -5,6 +7,7 @@ import {
     Flex,
     Heading,
     Icon,
+    Spinner,
     Table,
     Tbody,
     Td,
@@ -15,126 +18,138 @@ import {
     useBreakpointValue,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
+import { useQuery } from 'react-query';
+
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
-import { SidebarDrawerProvider } from '../../context/SidebarDrawerContext ';
 
 export default function UserList(): JSX.Element {
+    const { data, isLoading, error } = useQuery('users', async () => {
+        const response = await fetch('http://localhost:3000/api/users');
+        const data = await response.json();
+
+        return data;
+    });
+
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true,
     });
 
-    useEffect(() => {
-        fetch('http://localhost:3000/api/users')
-            .then(res => res.json())
-            .then(data => console.log(data));
-    }, []);
     return (
         <Box color="whiteAlpha.900">
-            <SidebarDrawerProvider>
-                <Header />
-                <Flex
-                    as="main"
-                    w="100%"
-                    my="6"
-                    maxWidth={1480}
-                    mx="auto"
-                    px={['3', '6']}
-                >
-                    {/* <Text fontSize="50rem">{namePoke}</Text> */}
-                    <Sidebar />
-                    <Box flex="1" borderRadius={8} bg="gray.800" p={['4', '8']}>
-                        <Flex mb="8" justify="space-between" align="center">
-                            <Heading as="h2" size="lg" fontWeight="normal">
-                                User List
-                            </Heading>
-                            <Link href="/users/create" passHref>
-                                <Button
-                                    as="a"
-                                    size="sm"
-                                    fontSize="sm"
-                                    colorScheme="pink"
-                                    leftIcon={
-                                        <Icon as={RiAddLine} fontSize="18" />
-                                    }
-                                >
-                                    Create new
-                                </Button>
-                            </Link>
+            <Header />
+            <Flex
+                as="main"
+                w="100%"
+                my="6"
+                maxWidth={1480}
+                mx="auto"
+                px={['3', '6']}
+            >
+                {/* <Text fontSize="50rem">{namePoke}</Text> */}
+                <Sidebar />
+
+                <Box flex="1" borderRadius={8} bg="gray.800" p={['4', '8']}>
+                    <Flex mb="8" justify="space-between" align="center">
+                        <Heading as="h2" size="lg" fontWeight="normal">
+                            User List
+                        </Heading>
+                        <Link href="/users/create" passHref>
+                            <Button
+                                as="a"
+                                size="sm"
+                                fontSize="sm"
+                                colorScheme="pink"
+                                leftIcon={<Icon as={RiAddLine} fontSize="18" />}
+                            >
+                                Create new
+                            </Button>
+                        </Link>
+                    </Flex>
+
+                    {isLoading ? (
+                        <Flex justify="center">
+                            <Spinner />
                         </Flex>
-                        <Table colorScheme="whiteAlpha">
-                            <Thead>
-                                <Tr>
-                                    <Th
-                                        px={['4', '4', '6']}
-                                        color="gray.300"
-                                        w="8"
-                                    >
-                                        <Checkbox colorScheme="pink" />
-                                    </Th>
-                                    <Th width="50px">Users</Th>
-                                    {isWideVersion && (
-                                        <>
-                                            <Th>Registration date</Th>
-                                            <Th w="8" />
-                                        </>
-                                    )}
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                <Tr>
-                                    <Td px={['4', '4', '6']}>
-                                        <Checkbox colorScheme="pink" />
-                                    </Td>
-                                    <Td>
-                                        <Box>
-                                            <Text fontWeight="bold">
-                                                Daniel Sobrinho
-                                            </Text>
-                                            <Text
-                                                fontSize="small"
-                                                color="gray.300"
-                                            >
-                                                dev.sobrinho@gmail.com
-                                            </Text>
-                                        </Box>
-                                    </Td>
-                                    {isWideVersion && (
-                                        <Td color="white">
-                                            <Box as="time">
-                                                04 de Abril, 2022
+                    ) : error ? (
+                        <Flex justify="center">
+                            <Text>Failed to get data</Text>
+                        </Flex>
+                    ) : (
+                        <>
+                            <Table colorScheme="whiteAlpha">
+                                <Thead>
+                                    <Tr>
+                                        <Th
+                                            px={['4', '4', '6']}
+                                            color="gray.300"
+                                            w="8"
+                                        >
+                                            <Checkbox colorScheme="pink" />
+                                        </Th>
+                                        <Th width="50px">Users</Th>
+                                        {isWideVersion && (
+                                            <>
+                                                <Th>Registration date</Th>
+                                                <Th w="8" />
+                                            </>
+                                        )}
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    <Tr>
+                                        <Td px={['4', '4', '6']}>
+                                            <Checkbox colorScheme="pink" />
+                                        </Td>
+                                        <Td>
+                                            <Box>
+                                                <Text fontWeight="bold">
+                                                    Daniel Sobrinho
+                                                </Text>
+                                                <Text
+                                                    fontSize="small"
+                                                    color="gray.300"
+                                                >
+                                                    dev.sobrinho@gmail.com
+                                                </Text>
                                             </Box>
                                         </Td>
-                                    )}
-                                    {isWideVersion && (
-                                        <Td>
-                                            <Button
-                                                as="a"
-                                                size="sm"
-                                                fontSize="sm"
-                                                colorScheme="purple"
-                                                leftIcon={
-                                                    <Icon
-                                                        as={RiPencilLine}
-                                                        fontSize="16"
-                                                    />
-                                                }
-                                            >
-                                                Edit
-                                            </Button>
-                                        </Td>
-                                    )}
-                                </Tr>
-                            </Tbody>
-                        </Table>
-                        <Pagination />
-                    </Box>
-                </Flex>
-            </SidebarDrawerProvider>
+                                        {isWideVersion && (
+                                            <Td color="white">
+                                                <Box as="time">
+                                                    04 de Abril, 2022
+                                                </Box>
+                                            </Td>
+                                        )}
+                                        {isWideVersion && (
+                                            <Td>
+                                                <Button
+                                                    as="a"
+                                                    size="sm"
+                                                    fontSize="sm"
+                                                    colorScheme="purple"
+                                                    leftIcon={
+                                                        <Icon
+                                                            as={RiPencilLine}
+                                                            fontSize="16"
+                                                        />
+                                                    }
+                                                >
+                                                    Edit
+                                                </Button>
+                                            </Td>
+                                        )}
+                                    </Tr>
+                                </Tbody>
+                            </Table>
+                            <Pagination />
+                        </>
+                    )}
+                </Box>
+            </Flex>
         </Box>
     );
 }

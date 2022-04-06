@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createServer, Factory, Model } from 'miragejs';
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
 
 type UserModal = {
@@ -31,8 +31,9 @@ export function makeServer() {
             }),
         },
 
+        // eslint-disable-next-line no-shadow
         seeds(server) {
-            server.createList('user', 200);
+            server.createList('user', 10);
         },
 
         routes() {

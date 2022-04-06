@@ -16,7 +16,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
-import { SidebarDrawerProvider } from '../../context/SidebarDrawerContext ';
 
 type CreateUserFormData = {
     name: string;
@@ -53,100 +52,81 @@ export default function CreateUser(): JSX.Element {
 
     return (
         <Box color="whiteAlpha.900">
-            <SidebarDrawerProvider>
-                <Header />
-                <Flex
-                    as="main"
-                    w="100%"
-                    my="6"
-                    maxWidth={1480}
-                    mx="auto"
-                    px="6"
+            <Header />
+            <Flex as="main" w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+                <Sidebar />
+                <Box
+                    as="form"
+                    method="POST"
+                    onSubmit={handleSubmit(handleCreateUser)}
+                    flex="1"
+                    borderRadius={8}
+                    bg="gray.800"
+                    p={['4', '8']}
                 >
-                    <Sidebar />
-                    <Box
-                        as="form"
-                        method="POST"
-                        onSubmit={handleSubmit(handleCreateUser)}
-                        flex="1"
-                        borderRadius={8}
-                        bg="gray.800"
-                        p={['4', '8']}
-                    >
-                        <Heading size="lg" fontWeight="normal">
-                            Create user
-                        </Heading>
-                        <Divider my="6" borderColor="gray.700" />
-                        <VStack spacing="8">
-                            <SimpleGrid
-                                minChildWidth="240px"
-                                spacing="8"
-                                w="100%"
-                            >
-                                <Input
-                                    type="text"
-                                    name="name"
-                                    label="Name"
-                                    placeholder="insert name"
-                                    error={formState.errors.name}
-                                    {...register('name')}
-                                />
-                                <Input
-                                    name="Email"
-                                    label="E-mail"
-                                    type="email"
-                                    placeholder="userEmail@email.com"
-                                    error={formState.errors.email}
-                                    {...register('email')}
-                                />
-                            </SimpleGrid>
-                            <SimpleGrid
-                                minChildWidth="240px"
-                                spacing="8"
-                                w="100%"
-                            >
-                                <Input
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    placeholder="insert password"
-                                    error={formState.errors.password}
-                                    {...register('password')}
-                                />
-                                <Input
-                                    name="password_confirmation"
-                                    label="Re-password"
-                                    type="password"
-                                    placeholder="confirm password"
-                                    error={
-                                        formState.errors.password_confirmation
-                                    }
-                                    {...register('password_confirmation')}
-                                />
-                            </SimpleGrid>
-                        </VStack>
+                    <Heading size="lg" fontWeight="normal">
+                        Create user
+                    </Heading>
+                    <Divider my="6" borderColor="gray.700" />
+                    <VStack spacing="8">
+                        <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
+                            <Input
+                                type="text"
+                                name="name"
+                                label="Name"
+                                placeholder="insert name"
+                                error={formState.errors.name}
+                                {...register('name')}
+                            />
+                            <Input
+                                name="Email"
+                                label="E-mail"
+                                type="email"
+                                placeholder="userEmail@email.com"
+                                error={formState.errors.email}
+                                {...register('email')}
+                            />
+                        </SimpleGrid>
+                        <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
+                            <Input
+                                name="password"
+                                label="Password"
+                                type="password"
+                                placeholder="insert password"
+                                error={formState.errors.password}
+                                {...register('password')}
+                            />
+                            <Input
+                                name="password_confirmation"
+                                label="Re-password"
+                                type="password"
+                                placeholder="confirm password"
+                                error={formState.errors.password_confirmation}
+                                {...register('password_confirmation')}
+                            />
+                        </SimpleGrid>
+                    </VStack>
 
-                        <Flex mt="8" justify="flex-end">
-                            <HStack spacing="4">
-                                <Link href="/users" passHref>
-                                    <Button as="a" colorScheme="whiteAlpha">
-                                        Cancel
-                                    </Button>
-                                </Link>
-                                {/* <Link href="/users/create/save" passHref> */}
-                                <Button
-                                    type="submit"
-                                    colorScheme="pink"
-                                    isLoading={formState.isSubmitting}
-                                >
-                                    Save
+                    <Flex mt="8" justify="flex-end">
+                        <HStack spacing="4">
+                            <Link href="/users" passHref>
+                                <Button as="a" colorScheme="whiteAlpha">
+                                    Cancel
                                 </Button>
-                                {/* </Link> */}
-                            </HStack>
-                        </Flex>
-                    </Box>
-                </Flex>
-            </SidebarDrawerProvider>
+                            </Link>
+                            {/* <Link href="/users/create/save" passHref> */}
+                            <Button
+                                type="submit"
+                                colorScheme="pink"
+                                isLoading={formState.isSubmitting}
+                            >
+                                Save
+                            </Button>
+                            {/* </Link> */}
+                        </HStack>
+                    </Flex>
+                </Box>
+            </Flex>
         </Box>
     );
 }
