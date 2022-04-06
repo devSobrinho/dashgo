@@ -9,7 +9,7 @@ type GetUsersResponse = {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const getUser = async (userId: number): Promise<User> => {
+export const getUser = async (userId: string): Promise<User> => {
     const { data } = await api.get(`users/${userId}`);
 
     return data.user;

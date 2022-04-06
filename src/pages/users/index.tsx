@@ -45,7 +45,7 @@ export default function UserList(): JSX.Element {
     });
 
     // Prefetch com react-query usando o QueryClient dele
-    const handlePrefetchUser = async (userId: number): Promise<void> => {
+    const handlePrefetchUser = async (userId: string): Promise<void> => {
         await queryClient.prefetchQuery(
             ['user', userId],
             () => getUser(userId),

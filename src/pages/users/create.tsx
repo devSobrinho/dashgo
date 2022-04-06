@@ -12,10 +12,14 @@ import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from 'react-query';
 
+import { useRouter } from 'next/router';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
+import { api } from '../../services/api';
+import { queryClient } from '../../services/queryClient';
 
 type CreateUserFormData = {
     name: string;
@@ -37,6 +41,28 @@ const schema = yup
     .required();
 
 export default function CreateUser(): JSX.Element {
+    const router = useRouter();
+
+    // um hook igual o useQuery do react-query
+    // o useMutation diferente do useQuery, você consegue monitorar estado do proprio hook como isLoading, isSuccess e etc
+    const createUser = useMutation(
+        async (user: CreateUserFormData) => {
+            const response = await api.post('users', {
+                user: {
+                    ...user,
+                    create_at: new Date(),
+                },
+            });
+
+            return response.data.user;
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries('users');
+            },
+        }
+    );
+
     const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
         resolver: yupResolver(schema),
     });
@@ -44,10 +70,8 @@ export default function CreateUser(): JSX.Element {
     const handleCreateUser: SubmitHandler<
         CreateUserFormData
     > = async values => {
-        // eslint-disable-next-line no-promise-executor-return
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        // eslint-disable-next-line no-console
-        console.log('values', values);
+        await createUser.mutateAsync(values);
+        router.push('/users');
     };
 
     return (

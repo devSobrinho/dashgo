@@ -1,5 +1,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createServer, Factory, Model, Response } from 'miragejs';
+import {
+    createServer,
+    Factory,
+    Model,
+    Response,
+    ActiveModelSerializer,
+} from 'miragejs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
 
@@ -12,6 +18,11 @@ type UserModal = {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function makeServer() {
     const server = createServer({
+        serializers: {
+            // permite utilizar o relacionamento para fazer cadastro e ect tudo numa requisição so, igual um ORM
+            application: ActiveModelSerializer,
+        },
+
         models: {
             // Partial os itens do objetos podem ter valor ou nao
             user: Model.extend<Partial<UserModal>>({}),
