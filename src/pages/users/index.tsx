@@ -17,8 +17,9 @@ import {
     Tr,
     useBreakpointValue,
 } from '@chakra-ui/react';
+import { animate, motion, useAnimation, useMotionValue } from 'framer-motion';
 import Link from 'next/link';
-import { RiAddLine, RiPencilLine } from 'react-icons/ri';
+import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
 import { useQuery } from 'react-query';
 
 import { Header } from '../../components/Header';
@@ -28,8 +29,11 @@ import { User } from '../../services/types/shared-types';
 // import { dateFormat } from '../../utils/dateFormat';
 
 export default function UserList(): JSX.Element {
+    // controls para animação o frame-motion
+    const controls = useAnimation();
+
     // lib react-query faz o cache entre a paginação do next
-    const { data, isLoading, error } = useQuery(
+    const { data, isLoading, isFetching, error, refetch } = useQuery(
         'users',
         async () => {
             const response = await fetch('http://localhost:3000/api/users');
@@ -84,18 +88,52 @@ export default function UserList(): JSX.Element {
                     <Flex mb="8" justify="space-between" align="center">
                         <Heading as="h2" size="lg" fontWeight="normal">
                             User List
+                            {!isLoading && isFetching && (
+                                <Spinner size="sm" color="gray.500" ml="4" />
+                            )}
                         </Heading>
-                        <Link href="/users/create" passHref>
+                        <Box>
+                            <Link href="/users/create" passHref>
+                                <Button
+                                    as="a"
+                                    size="sm"
+                                    fontSize="sm"
+                                    colorScheme="pink"
+                                    leftIcon={
+                                        <Icon as={RiAddLine} fontSize="18" />
+                                    }
+                                >
+                                    Create new
+                                </Button>
+                            </Link>
+
                             <Button
-                                as="a"
+                                ml="1rem"
                                 size="sm"
                                 fontSize="sm"
-                                colorScheme="pink"
-                                leftIcon={<Icon as={RiAddLine} fontSize="18" />}
+                                colorScheme="gray.900"
+                                border="1px solid"
+                                borderColor="pink.500"
+                                leftIcon={
+                                    <motion.span
+                                        animate={controls}
+                                        // onTap={() => cycleX()}
+                                    >
+                                        <Icon
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            mr="0.25rem"
+                                            as={RiRefreshLine}
+                                            fontSize="18"
+                                        />
+                                    </motion.span>
+                                }
+                                onClick={() => !isLoading && refetch()}
                             >
-                                Create new
+                                Refresh All
                             </Button>
-                        </Link>
+                        </Box>
                     </Flex>
 
                     {isLoading ? (
