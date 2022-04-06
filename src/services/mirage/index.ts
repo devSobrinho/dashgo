@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createServer, Factory, Model } from 'miragejs';
+import { createServer, Factory, Model, Response } from 'miragejs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import faker from 'faker';
 
@@ -33,7 +33,7 @@ export function makeServer() {
 
         // eslint-disable-next-line no-shadow
         seeds(server) {
-            server.createList('user', 10);
+            server.createList('user', 200);
         },
 
         routes() {
@@ -43,7 +43,29 @@ export function makeServer() {
 
             // seta o timing da api, o carregamento da page
             this.timing = 750;
-            this.get('/users');
+
+            // Criando a paginação
+            this.get('/users', function (schema, request) {
+                const { page = 1, per_page = 10 } = request.queryParams;
+
+                const total = schema.all('user').length;
+
+                const pageStart = (Number(page) - 1) * Number(per_page);
+                const pageEnd = Number(pageStart) + Number(per_page);
+
+                // serializando o users para fazer o slice no metadados
+                const users = this.serialize(schema.all('user')).users.slice(
+                    pageStart,
+                    pageEnd
+                );
+
+                // retornando com status code 200, headers info total count e no body os users
+                return new Response(
+                    200,
+                    { 'x-total-count': String(total) },
+                    { users }
+                );
+            });
             this.post('/users');
 
             // isso faz quando ele criar as rotas ele apaga a rota do mirage e o api do next nao fica incompativel
