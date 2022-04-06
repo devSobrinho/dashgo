@@ -26,7 +26,6 @@ export default function UserList(): JSX.Element {
         base: false,
         lg: true,
     });
-
     return (
         <Box color="whiteAlpha.900">
             <SidebarDrawerProvider>
@@ -39,6 +38,7 @@ export default function UserList(): JSX.Element {
                     mx="auto"
                     px={['3', '6']}
                 >
+                    {/* <Text fontSize="50rem">{namePoke}</Text> */}
                     <Sidebar />
                     <Box flex="1" borderRadius={8} bg="gray.800" p={['4', '8']}>
                         <Flex mb="8" justify="space-between" align="center">
@@ -59,7 +59,6 @@ export default function UserList(): JSX.Element {
                                 </Button>
                             </Link>
                         </Flex>
-
                         <Table colorScheme="whiteAlpha">
                             <Thead>
                                 <Tr>
@@ -125,7 +124,6 @@ export default function UserList(): JSX.Element {
                                 </Tr>
                             </Tbody>
                         </Table>
-
                         <Pagination />
                     </Box>
                 </Flex>

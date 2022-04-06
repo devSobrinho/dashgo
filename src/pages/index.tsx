@@ -71,6 +71,7 @@ export default function Home(): JSX.Element {
                         {...register('email')}
                     />
                     <Input
+                        color="cyan"
                         name="password"
                         label="password"
                         placeholder="Insert your password"

@@ -44,6 +44,7 @@
     "eslint-plugin-react-hooks": "^4.4.0",
     "eslint-plugin-testing-library": "^5.2.0",
     "jest": "^27.5.1",
+    "miragejs": "^0.1.43",
     "prettier": "^2.6.1",
     "typescript": "^4.6.3"
   },
