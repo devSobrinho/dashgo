@@ -16,6 +16,7 @@ import {
     Thead,
     Tr,
     useBreakpointValue,
+    Link as ChakraLink,
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import Link from 'next/link';
@@ -25,7 +26,8 @@ import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
-import { useUsers } from '../../hooks/useUsers';
+import { getUser, useUsers } from '../../hooks/useUsers';
+import { queryClient } from '../../services/queryClient';
 import { User } from '../../services/types/shared-types';
 // import { dateFormat } from '../../utils/dateFormat';
 
@@ -41,6 +43,17 @@ export default function UserList(): JSX.Element {
         base: false,
         lg: true,
     });
+
+    // Prefetch com react-query usando o QueryClient dele
+    const handlePrefetchUser = async (userId: number): Promise<void> => {
+        await queryClient.prefetchQuery(
+            ['user', userId],
+            () => getUser(userId),
+            {
+                staleTime: 1000 * 5, // 5 segundo sem prefetch
+            }
+        );
+    };
 
     return (
         <Box color="whiteAlpha.900">
@@ -146,9 +159,18 @@ export default function UserList(): JSX.Element {
                                                 </Td>
                                                 <Td>
                                                     <Box>
-                                                        <Text fontWeight="bold">
-                                                            {user.name}
-                                                        </Text>
+                                                        <ChakraLink
+                                                            color="purple.400"
+                                                            onMouseEnter={() =>
+                                                                handlePrefetchUser(
+                                                                    user.id
+                                                                )
+                                                            }
+                                                        >
+                                                            <Text fontWeight="bold">
+                                                                {user.name}
+                                                            </Text>
+                                                        </ChakraLink>
                                                         <Text
                                                             fontSize="small"
                                                             color="gray.300"

@@ -8,6 +8,13 @@ type GetUsersResponse = {
     totalCount: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const getUser = async (userId: number): Promise<User> => {
+    const { data } = await api.get(`users/${userId}`);
+
+    return data.user;
+};
+
 export const getUsers = async (page = 1): Promise<GetUsersResponse> => {
     const { data, headers } = await api.get('users/', {
         params: {

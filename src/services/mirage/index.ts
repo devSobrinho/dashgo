@@ -44,6 +44,9 @@ export function makeServer() {
             // seta o timing da api, o carregamento da page
             this.timing = 750;
 
+            // route para user por id
+            this.get('/users/:id');
+
             // Criando a paginação
             this.get('/users', function (schema, request) {
                 const { page = 1, per_page = 10 } = request.queryParams;
