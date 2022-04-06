@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import Link from 'next/link';
+import { useState } from 'react';
 import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
 
 import { Header } from '../../components/Header';
@@ -32,8 +33,10 @@ export default function UserList(): JSX.Element {
     // controls para animação o frame-motion
     const controls = useAnimation();
 
+    const [page, setPage] = useState(1);
+
     // lib react-query faz o cache entre a paginação do next
-    const { data, isLoading, isFetching, error, refetch } = useUsers();
+    const { data, isLoading, isFetching, error, refetch } = useUsers(page);
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true,
@@ -135,7 +138,7 @@ export default function UserList(): JSX.Element {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {data.map((user: User) => {
+                                    {data.users.map((user: User) => {
                                         return (
                                             <Tr key={user.id}>
                                                 <Td px={['4', '4', '6']}>
@@ -187,9 +190,9 @@ export default function UserList(): JSX.Element {
                                 </Tbody>
                             </Table>
                             <Pagination
-                                totalCountOfRegisters={200}
-                                currentPage={4}
-                                onPageChange={() => {}}
+                                totalCountOfRegisters={data.totalCount}
+                                currentPage={page}
+                                onPageChange={setPage}
                             />
                         </>
                     )}

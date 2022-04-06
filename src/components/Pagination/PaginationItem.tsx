@@ -1,21 +1,55 @@
-import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
-import { useState } from 'react';
+// import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { PaginationButton } from './PaginationButton';
 
 type PaginationItemProps = {
     isCurrent?: boolean;
     number: number;
-    buttonCurrent: string;
-} & ChakraButtonProps;
+    onPageChange: (page: number) => void;
+};
 
 export function PaginationItem({
     isCurrent = false,
     number,
-    buttonCurrent,
-    ...rest
+    onPageChange,
 }: PaginationItemProps): JSX.Element {
-    if (Number(buttonCurrent) === number || (!buttonCurrent && isCurrent)) {
+    // if (isCurrent) {
+    //     return (
+    //         <ChakraButton
+    //             size="sm"
+    //             fontSize="xs"
+    //             width="4"
+    //             colorScheme="pink"
+    //             disabled
+    //             _disabled={{
+    //                 bg: 'pink.500',
+    //                 cursor: 'default',
+    //             }}
+    //             _hover={{
+    //                 bg: 'pink.500',
+    //             }}
+    //         >
+    //             {number}
+    //         </ChakraButton>
+    //     );
+    // }
+
+    // return (
+    //     <ChakraButton
+    //         size="sm"
+    //         fontSize="xs"
+    //         width="4"
+    //         bg="gray.700"
+    //         _hover={{
+    //             bg: 'gray.500',
+    //         }}
+    //         onClick={() => onPageChange(number)}
+    //     >
+    //         {number}
+    //     </ChakraButton>
+    // );
+
+    if (isCurrent) {
         return (
             <PaginationButton
                 colorScheme="pink"
@@ -27,18 +61,17 @@ export function PaginationItem({
                 _hover={{
                     bg: 'pink.500',
                 }}
-                {...rest}
                 value={number}
                 number={number}
-            >
-                {number}
-            </PaginationButton>
+            />
         );
     }
 
     return (
-        <PaginationButton number={number} {...rest} value={number}>
-            {number}
-        </PaginationButton>
+        <PaginationButton
+            number={number}
+            value={number}
+            onClick={() => onPageChange(number)}
+        />
     );
 }

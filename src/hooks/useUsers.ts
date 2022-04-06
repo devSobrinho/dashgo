@@ -1,9 +1,21 @@
+/* eslint-disable no-shadow */
 import { useQuery } from 'react-query';
 import { api } from '../services/api';
 import { User } from '../services/types/shared-types';
 
-export const getUsers = async (): Promise<User[]> => {
-    const { data } = await api.get('users');
+type GetUsersResponse = {
+    users: User[];
+    totalCount: number;
+};
+
+export const getUsers = async (page = 1): Promise<GetUsersResponse> => {
+    const { data, headers } = await api.get('users/', {
+        params: {
+            page,
+        },
+    });
+
+    const totalCount = Number(headers['x-total-count']);
 
     const users: User[] = data.users.map((user: User) => {
         return {
@@ -21,12 +33,12 @@ export const getUsers = async (): Promise<User[]> => {
         };
     });
 
-    return users;
+    return { users, totalCount };
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useUsers() {
-    return useQuery('users', getUsers, {
+export function useUsers(page = 1) {
+    return useQuery('users', () => getUsers(page), {
         staleTime: 1000 * 5, // 5 seconds, durante 5s o react-query não precisa refazer o feacth, assim nao precisando ser recarregado nesse time
     });
 }

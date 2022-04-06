@@ -1,5 +1,4 @@
 import { Box, Stack, Text } from '@chakra-ui/react';
-import { MouseEventHandler, useState } from 'react';
 import { PaginationItem } from './PaginationItem';
 
 export type PaginationProps = {
@@ -27,13 +26,6 @@ export function Pagination({
     currentPage = 1,
     onPageChange,
 }: PaginationProps): JSX.Element {
-    const [buttonCurrent, setButtonCurrent] = useState('');
-    const [results, setResults] = useState({
-        resultMin: 0,
-        resultMax: 10,
-        resultTotal: 100,
-    });
-
     const lastPage = Math.floor(totalCountOfRegisters / registersPerPage);
 
     const previousPages =
@@ -52,19 +44,6 @@ export function Pagination({
               )
             : [];
 
-    const handleClick: MouseEventHandler<HTMLButtonElement> = e => {
-        setButtonCurrent(e.currentTarget.value);
-        if (buttonCurrent) {
-            const valuePage = Number(e.currentTarget.value);
-            const valueSearchPage = 10;
-            setResults({
-                ...results,
-                resultMin: valuePage * valueSearchPage - valueSearchPage,
-                resultMax: valuePage * valueSearchPage,
-            });
-        }
-    };
-
     return (
         <Stack
             direction={['column', 'row']}
@@ -79,20 +58,10 @@ export function Pagination({
                 <strong>{totalCountOfRegisters}</strong>
             </Box>
             <Stack direction="row" spacing="2">
-                {/* {currentPage >= previousPages[0] &&
-                    previousPages[0] - siblingsCount > 0 && (
-                        <PaginationItem
-                            buttonCurrent={buttonCurrent}
-                            onClick={handleClick}
-                            number={previousPages[0] - siblingsCount}
-                        />
-                    )} */}
-
                 {currentPage > 1 + siblingsCount && (
                     <>
                         <PaginationItem
-                            buttonCurrent={buttonCurrent}
-                            onClick={handleClick}
+                            onPageChange={onPageChange}
                             number={1}
                         />
                         {currentPage > 2 + siblingsCount && (
@@ -107,16 +76,14 @@ export function Pagination({
                     previousPages.map(page => {
                         return (
                             <PaginationItem
-                                buttonCurrent={buttonCurrent}
-                                onClick={handleClick}
+                                onPageChange={onPageChange}
                                 number={page}
                             />
                         );
                     })}
 
                 <PaginationItem
-                    buttonCurrent={buttonCurrent}
-                    onClick={handleClick}
+                    onPageChange={onPageChange}
                     number={currentPage}
                     isCurrent
                 />
@@ -125,8 +92,7 @@ export function Pagination({
                     nextPages.map(page => {
                         return (
                             <PaginationItem
-                                buttonCurrent={buttonCurrent}
-                                onClick={handleClick}
+                                onPageChange={onPageChange}
                                 number={page}
                             />
                         );
@@ -140,22 +106,11 @@ export function Pagination({
                             </Text>
                         )}
                         <PaginationItem
-                            buttonCurrent={buttonCurrent}
-                            onClick={handleClick}
+                            onPageChange={onPageChange}
                             number={lastPage}
                         />
                     </>
                 )}
-
-                {/*
-                {currentPage < nextPages[lastPage] &&
-                    nextPages[lastPage] + siblingsCount < lastPage && (
-                        <PaginationItem
-                            buttonCurrent={buttonCurrent}
-                            onClick={handleClick}
-                            number={nextPages[lastPage]}
-                        />
-                    )} */}
             </Stack>
         </Stack>
     );
