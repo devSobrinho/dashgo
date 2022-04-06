@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 import { api } from '../services/api';
 import { User } from '../services/types/shared-types';
 
@@ -15,7 +15,7 @@ export const getUser = async (userId: string): Promise<User> => {
     return data.user;
 };
 
-export const getUsers = async (page = 1): Promise<GetUsersResponse> => {
+export const getUsers = async (page: number): Promise<GetUsersResponse> => {
     const { data, headers } = await api.get('users/', {
         params: {
             page,
@@ -44,8 +44,10 @@ export const getUsers = async (page = 1): Promise<GetUsersResponse> => {
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function useUsers(page = 1) {
+export function useUsers(page: number /* , options: UseQueryOptions */) {
     return useQuery(['users', page], () => getUsers(page), {
         staleTime: 1000 * 5, // 5 seconds, durante 5s o react-query não precisa refazer o feacth, assim nao precisando ser recarregado nesse time
+        // integrando o nextjs com o react-query pois a option initialData não faz o primeiro fetch caso o SSR mande o initialData
+        // ...options, <- funciona com api ativa, no mirage não funciona
     });
 }

@@ -19,6 +19,7 @@ import {
     Link as ChakraLink,
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
@@ -26,19 +27,28 @@ import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
 import { Pagination } from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
-import { getUser, useUsers } from '../../hooks/useUsers';
+import { getUser, getUsers, useUsers } from '../../hooks/useUsers';
 import { queryClient } from '../../services/queryClient';
 import { User } from '../../services/types/shared-types';
 // import { dateFormat } from '../../utils/dateFormat';
 
-export default function UserList(): JSX.Element {
+export default function UserList({ users }): JSX.Element {
     // controls para animação do frame-motion
     const controls = useAnimation();
 
     const [page, setPage] = useState(1);
 
     // lib react-query faz o cache entre a paginação do next
-    const { data, isLoading, isFetching, error, refetch } = useUsers(page);
+    const { data, isLoading, isFetching, error, refetch } = useUsers(
+        page
+        // s a props do server side como initialData
+        //   , {
+        //     initialData: users,
+        // }
+    );
+
+    console.log('o data', data);
+
     const isWideVersion = useBreakpointValue({
         base: false,
         lg: true,
@@ -50,7 +60,7 @@ export default function UserList(): JSX.Element {
             ['user', userId],
             () => getUser(userId),
             {
-                staleTime: 1000 * 5, // 5 segundo sem prefetch
+                staleTime: 1000 * 60 * 10, // 10min sem prefetch
             }
         );
     };
@@ -223,3 +233,12 @@ export default function UserList(): JSX.Element {
         </Box>
     );
 }
+
+// Server Side setando um user para iniciar o primeiro req no server! Não funciona com miragejs, so com api ativa
+// export const getServerSideProps: GetServerSideProps = async ctx => {
+//     const { users, totalCount } = await getUsers(1);
+
+//     return {
+//         props: { users, totalCount },
+//     };
+// };

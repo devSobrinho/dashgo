@@ -63,6 +63,21 @@ export default function CreateUser(): JSX.Element {
         }
     );
 
+    /* useMutateTodo -> Mudar o valor de dentro do cache
+
+        const useMutateTodo = () => {
+            const queryClient = useQueryClient();
+
+            return useMutation(editTodo, {
+                // Notice the second argument is the variables object that the `mutate` function receives
+                onSuccess: (data, variables) => {
+                                            ***key da query
+                    queryClient.setQueryData(['todo', { id: variables.id }], data);
+                },
+            });
+        };
+    */
+
     const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
         resolver: yupResolver(schema),
     });
