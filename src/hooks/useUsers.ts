@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery } from 'react-query';
 import { api } from '../services/api';
 import { User } from '../services/types/shared-types';
 
@@ -51,3 +51,19 @@ export function useUsers(page: number /* , options: UseQueryOptions */) {
         // ...options, <- funciona com api ativa, no mirage não funciona
     });
 }
+
+// MY HOOK
+// type OmitOptionsHook = Omit<
+//     UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+//     'queryKey'
+// >;
+
+// export function useUsers(
+//     page: number,
+//     fetch?: QueryFunction<GetUsersResponse, (string | number)[]>,
+//     options?: Omit<>
+// ): UseQueryResult<T> {
+//     return useQuery(['users', page], () => getUsers(page), {
+//         staleTime: 1000 * 5, // 5s
+//     });
+// }

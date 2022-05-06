@@ -19,7 +19,6 @@ import {
     Link as ChakraLink,
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
-import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import { RiAddLine, RiPencilLine, RiRefreshLine } from 'react-icons/ri';
@@ -33,6 +32,8 @@ import { User } from '../../services/types/shared-types';
 // import { dateFormat } from '../../utils/dateFormat';
 
 export default function UserList({ users }): JSX.Element {
+    const [dataState, setDataState] = useState();
+
     // controls para animação do frame-motion
     const controls = useAnimation();
 
@@ -60,7 +61,8 @@ export default function UserList({ users }): JSX.Element {
             ['user', userId],
             () => getUser(userId),
             {
-                staleTime: 1000 * 60 * 10, // 10min sem prefetch
+                staleTime: 1000 * 60 * 10,
+                // 10min sem prefetch
             }
         );
     };

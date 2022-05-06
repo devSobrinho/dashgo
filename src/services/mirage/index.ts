@@ -15,6 +15,8 @@ type UserModal = {
     create_at: string;
 };
 
+const a = [...new Array(4)];
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function makeServer() {
     const server = createServer({
@@ -53,7 +55,7 @@ export function makeServer() {
             this.namespace = 'api';
 
             // seta o timing da api, o carregamento da page
-            this.timing = 750;
+            this.timing = 100;
 
             // route para user por id
             this.get('/users/:id');
@@ -66,7 +68,6 @@ export function makeServer() {
 
                 const pageStart = (Number(page) - 1) * Number(per_page);
                 const pageEnd = Number(pageStart) + Number(per_page);
-
                 // serializando o users para fazer o slice no metadados
                 const users = this.serialize(schema.all('user')).users.slice(
                     pageStart,
